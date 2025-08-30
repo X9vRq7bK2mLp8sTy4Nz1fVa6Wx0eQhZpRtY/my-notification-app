@@ -19,10 +19,15 @@ function urlBase64ToUint8Array(base64String) {
 
 export default function Home() {
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [permission, setPermission] = useState(Notification.permission);
+  const [permission, setPermission] = useState('default');
 
   useEffect(() => {
     if ('serviceWorker' in navigator && 'PushManager' in window) {
+      // Check permission on the client side only
+      if ('Notification' in window) {
+        setPermission(Notification.permission);
+      }
+
       navigator.serviceWorker.register('/service-worker.js')
         .then((reg) => {
           console.log('Service Worker Registered');
